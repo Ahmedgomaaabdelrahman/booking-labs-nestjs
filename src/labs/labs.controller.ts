@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { LabsService } from './labs.service';
 import { CreateLabDto } from './dtos/create-lab.dto';
@@ -8,6 +9,7 @@ import { dayInterface } from './day.interface';
 @Controller('labs')
 export class LabsController {
     constructor(private labService: LabsService) { }
+    // eslint-disable-next-line prettier/prettier
     @Post('/create')
     createLab(@Body() body: CreateLabDto) {
         return this.labService.create(body.name, body.capacity, body.address, body.image, body.available_times)

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { IsArray, IsBoolean, IsOptional, IsString } from "class-validator";
 import { dayInterface } from "../day.interface";
 
