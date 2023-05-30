@@ -1,4 +1,4 @@
-import { IsArray, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsString } from "class-validator";
 import { dayInterface } from "../day.interface";
 
 export class LabDto {
@@ -11,10 +11,13 @@ export class LabDto {
     @IsString()
     capacity: string;
 
-    @IsArray()
-    images: String[]
+    @IsString()
+    image: String
 
     @IsArray()
     avaiable_times: dayInterface[]
+
+    @IsBoolean()
+    reserved:boolean
 }
  

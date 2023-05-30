@@ -10,7 +10,7 @@ export class LabsController {
     constructor(private labService: LabsService) { }
     @Post('/create')
     createLab(@Body() body: CreateLabDto) {
-        return this.labService.create(body.name, body.capacity, body.address, body.images, body.available_times)
+        return this.labService.create(body.name, body.capacity, body.address, body.image, body.available_times)
     }
 
     @Get()
@@ -18,6 +18,11 @@ export class LabsController {
         return this.labService.findAll()
     }
 
+
+    @Get('/:id')
+    getLabById(@Param('id') labid: string) {
+        return this.labService.find(parseInt(labid))
+    }
     @Patch('/update/:id')
     updateLab(@Param('id') labid: string,@Body() body: UpdateLabDto) {
         return this.labService.update(parseInt(labid), body);
@@ -30,12 +35,12 @@ export class LabsController {
 
     @Post('/search')
     searchAboutLab(@Body() body: SearchLabDto){ 
-        return this.labService.search(body);
+        return this.labService.search(body.capacity);
     }
 
-    @Post('/reserve/:id')
-    reserveLab(@Param('id') labid: string, @Body() body:dayInterface){
-        return this.labService.reserve(parseInt(labid), body)
+    @Get('/reserve/:id')
+    reserveLab(@Param('id') labid: string){
+        return this.labService.reserve(parseInt(labid))
     }
 
 }

@@ -1,20 +1,27 @@
+/* eslint-disable prettier/prettier */
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Lab } from "./lab.entity";
 import { LabDto } from "./dtos/lab.dto";
 import { dayInterface } from "./day.interface";
+import { NotFoundException } from "@nestjs/common";
 
 export class LabsService {
-    constructor(@InjectRepository(Lab) private labsRepo: Repository<Lab>){}
-
-    create(name: string, capacity: string, address: string,  images: string[],available_times: dayInterface[]){
-        const savedLab = this.labsRepo.create({ name, capacity,address, images, available_times});
-        return this.labsRepo.save(savedLab);
+    constructor(@InjectRepository(Lab) private labsRepo: Repository<Lab>){
+        
     }
 
+    create(name: string, capacity: string, address: string,  image: string,available_times: dayInterface[]){
+        const savedLab = this.labsRepo.create({ name, capacity,address, image, available_times});
+        return this.labsRepo.save(savedLab);
+    }
+   
     async findAll() {
-        const allLabs = await this.labsRepo.find();
+        const allLabs = await this.labsRepo.find({where:{reserved: false}});
         return allLabs;
+    }
+    async setReservedColumnToFalse(): Promise<void> {
+        await this.labsRepo.update({}, { reserved: false });
     }
 
     find(id: number) {
@@ -33,14 +40,17 @@ export class LabsService {
         return this.labsRepo.remove(lab);
     }
 
-    async search(body: Partial<Lab>) {
-        const filteredLabs = await this.labsRepo.find();
+    async search(capacity: string) {
+        const filteredLabs = await this.labsRepo.find({ where: {capacity,reserved: false}});
         return filteredLabs;
     }
 
-    reserve(id: number, reservationTime: dayInterface){
-        const lab = this.find(id)
-        return lab;
+    async reserve(id: number): Promise<Lab> {
+        // this.setReservedColumnToFalse()
+        const lab: Lab = await this.labsRepo.findOneOrFail({where:{id}});
+      
+        lab.reserved = true;
+        return this.labsRepo.save(lab);
     }
 
 }

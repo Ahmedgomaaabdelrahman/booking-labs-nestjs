@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { LabDto } from "./dtos/lab.dto";
 import { dayInterface } from "./day.interface";
 
@@ -16,10 +16,13 @@ export class Lab {
     @Column()
     capacity: string;
 
-    @Column('simple-json', {nullable: true})
-    images: string[]
+    @Column()
+    image: string;
     
     @Column('simple-json', {nullable: true})
     available_times: dayInterface[]
+
+    @Column({nullable: true})
+    reserved:boolean;
 
 }
